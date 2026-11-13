@@ -1,73 +1,34 @@
 # n0c0.de-dsh
+Minimal, self-hosted server dashboard for services and widgets.
 
-A minimal, lightweight, and customizable self-hosted service dashboard and widget board for home servers and homelabs.
-
-## What is n0c0.de?
-
+### What is n0c0.de?
 [n0c0.de](https://n0c0.de) - a collection of small and lightweight apps based mostly on PHP, with a minimal amount of CSS and JS.
 
-## Features
+### Features
+- 100% self-hosted, zero dependencies
+- No JavaScript needed (works without JS)
+- Minimal service tiles with title as a direct link and optional subtitle (e.g. IP/port or note)
+- Embed live iframes (Netdata, Grafana, status monitors, web UIs)
+- Configurable layout: 1, 2, or 3 columns for tiles and iframes
+- Selectable iframe position: top of the dashboard or bottom
+- Custom categories for organizing services
+- JSON only - no database needed (no SQLite, no MySQL)
+- Backup and restore with one-click JSON export/import
+- Dedicated admin panel with optional password protection (set during setup or in settings)
+- CSRF protection, `password_hash`
+- Classless CSS - no frameworks, no build step
 
-- **100% self-hosted, zero external dependencies**: Runs everywhere PHP 8+ runs.
-- **Minimalist Dashboard**: Clean service tiles with just the title as a direct link, custom target (`_blank` / `_self`), and embedded live iframes (Netdata, Grafana, status pages, web UIs).
-- **Setup Wizard**: Fast first-time setup with configurable admin password protection (enabled by default, can be toggled off) and optional demo homelab services.
-- **Dedicated Admin Panel**: Manage service tiles, iframes, and categories with simple reordering, editing, and deletion.
-- **JSON Storage**: Flat-file JSON configuration with atomic writes (`flock`) — zero database setup required (no MySQL, no SQLite).
-- **Export & Import**: One-click JSON backup export and restore directly from the admin panel.
-- **Zero JavaScript**: Pure PHP and HTML, runs completely without any JavaScript.
-- **Security built-in**: Strict CSRF token protection on all state-changing actions and `password_hash()` (bcrypt) for admin authentication.
-- **Classless CSS**: Pure semantic HTML styling via `style.css` — retro cyberpunk/terminal aesthetics with zero frameworks and zero build steps.
+## Requirements
+- **PHP >= 7.4** (recommended >= 8.1)
+- PHP extensions: `json`, `session`
+- Writable script directory (`data/` directory is created there)
+- Any webserver: Apache / Nginx / Caddy or built-in `php -S`
 
-## Quick Start
+## Installation
+1. Download / clone the repo
+2. Unpack on your hosting
+3. Make sure the script directory is writable and the `data/` directory is protected from direct access (deny rules)
+4. Go through `setup.php`
+5. Enjoy!
 
-### Built-in PHP Server
-
-```bash
-git clone https://github.com/strawfervor/n0c0.de-dsh.git
-cd n0c0.de-dsh
-php -S 0.0.0.0:8080
-```
-
-Open `http://localhost:8080` in your browser. The setup wizard (`setup.php`) will guide you through the initial configuration.
-
-### Apache / Nginx / Caddy
-
-Point your web server root to the project directory. The `data/` folder is automatically protected from unauthorized web access via `.htaccess` and `data/index.php`.
-
-For Nginx, ensure internal data files are not served directly:
-```nginx
-location ^~ /data/ {
-    deny all;
-    return 403;
-}
-```
-
-## Structure
-
-```
-├── admin.php       # Management panel for services, iframes, and settings
-├── config.php      # Core helpers, session, security, and atomic storage engine
-├── index.php       # Main user-facing dashboard with filter search
-├── login.php       # Admin authentication form
-├── logout.php      # Session terminator
-├── setup.php       # First-time installation wizard
-├── style.css       # Classless retro stylesheet (n0c0.de)
-├── tests/          # Automated test suite
-│   └── test.php
-└── data/           # Created automatically on setup (protected)
-    ├── .htaccess
-    ├── index.php
-    └── config.json
-```
-
-## Testing
-
-Run the included standalone test suite:
-
-```bash
-php tests/test.php
-```
-
-## License
-
-[MIT](LICENSE)
+To start fresh, just delete the `data/` directory (or `data/config.json`).
